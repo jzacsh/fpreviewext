@@ -1,5 +1,6 @@
 OUT_NAME  :=  extension
 CRX_FILE  :=  $(OUT_NAME).crx
+ZIP_FILE  :=  $(OUT_NAME).zip
 TMP_BASE  :=  build.
 
 # requires of buildcrx in $PATH; see:
@@ -9,6 +10,7 @@ $(CRX_FILE): manifest.json index.js index.css
 	$(shell mkdir $(TMP)/$(OUT_NAME)/)
 	$(shell ./cptag.sh $(TMP)/$(OUT_NAME)/ $^)
 	cd $(TMP) && buildcrx $(OUT_NAME) $(PRIVATEK)
+	cd $(TMP) && zip $(ZIP_FILE) $(OUT_NAME)/*
 	ln --symbolic --force $(TMP)/$(CRX_FILE) $(CRX_FILE)
 
 all: clean $(CRX_FILE)
