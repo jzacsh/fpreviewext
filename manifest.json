@@ -1,6 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Image Browser",
+  "short_name": "fpreviewext",
   "version": "VERSION_NUM",
 
   "description": "Adds gallery preview to file:// pages per Git @GITREF",
