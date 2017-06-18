@@ -1,4 +1,6 @@
 = `file://` browsing with thumbnails & previews
+:crextid: ohknkjkohjanlinnidlecechhdhkhdoh
+:crwebstore: https://chrome.google.com/webstore/detail/{crextid}
 :iconic: https://github.com/iconic/open-iconic/tree/1d1e8885c503187
 :icofolder: https://github.com/iconic/open-iconic/tree/1d1e8885c503187/svg/folder.svg
 :icoimg: https://github.com/iconic/open-iconic/tree/1d1e8885c503187/svg/image.svg
@@ -12,6 +14,8 @@ capabilities in the future.
 
 image:screenshot.webp[
 alt="preview of extension's changes", width="70%"]
+
+Can be installed {crwebstore}[directly from the webstore here]
 
 == contributing
 
