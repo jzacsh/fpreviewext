@@ -39,7 +39,7 @@ buildSemVer() (
   minorBumpedAt="$(git log --max-count=1 --format=%H "$vfPath")"
 
   local patchesSince # INCLUDING current dirty staging's commit
-  patchesSince=$(git rev-list "$minorBumpedAt"^..HEAD | wc -l)
+  patchesSince=$(git rev-list "$minorBumpedAt"..HEAD | wc -l)
 
   printf '%s.%d' "$semVer" "$patchesSince"
 )

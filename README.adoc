@@ -44,3 +44,8 @@ cd build.1OQC8F && zip extension.zip extension/*
   adding: extension/manifest.json (deflated 44%)
 ln --symbolic --force build.1OQC8F/extension.zip extension.zip
 ----
+
+.adjusting semver versioning
+. major or minor version is kept in `./major.minor`
+. `make extension.crx` auto-builds full semver string
+.. run make target *after* committing  for accurate patch numbers
