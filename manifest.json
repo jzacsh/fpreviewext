@@ -1,0 +1,21 @@
+{
+  "manifest_version": 2,
+  "name": "Image Browser",
+  "version": "0.0.1",
+
+  "description": "Turns file:/// pages containing images into grid-style galleries, like typical desktop file browsers",
+
+  "page_action": {
+    "default_title": "Injects Gallery Grid into File Browsing"
+  },
+  "author": "https://j.jzac.sh",
+  "content_scripts": [
+    {
+      "matches": ["file://*"],
+      "css": ["index.css"],
+      "js": ["index.js"],
+      "include_globs": ["file://*/"]
+    }
+  ],
+  "permissions": ["tabs", "file://*/"]
+}

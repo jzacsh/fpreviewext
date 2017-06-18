@@ -1,0 +1,42 @@
+= `file://` browsing with thumbnails & previews
+
+Particularly useful at the moment while all my linux tooling is confused by
+webp, yet I use webp heavily. Good old browsers, though, can do everything.
+
+For now this is just an image previewer, but I imagine I might want to add other
+capabilities in the future.
+
+== contributing
+
+.build "packed" chrome extension
+----
+$ make PRIVATEK=/abs/path/mykey.pem  # defaults to:
+$ make PRIVATEK=/abs/path/mykey.pem extension.crx
+mkdir build.29A4wN/extension/
+cp manifest.json index.js index.css build.29A4wN/extension/
+cd build.29A4wN && zip extension.zip extension/*
+  adding: extension/index.css (stored 0%)
+  adding: extension/index.js (deflated 65%)
+  adding: extension/manifest.json (deflated 44%)
+ln --symbolic --force build.29A4wN/extension.zip extension.zip
+----
+
+.cleanup existing builds
+----
+$ make clean
+rm -f extension.zip build.* -rf
+----
+
+.cleanup and build in one shot
+----
+
+$ make PRIVATEK=/abs/path/mykey.pem all
+rm -f extension.zip build.* -rf
+mkdir build.1OQC8F/extension/
+cp manifest.json index.js index.css build.1OQC8F/extension/
+cd build.1OQC8F && zip extension.zip extension/*
+  adding: extension/index.css (stored 0%)
+  adding: extension/index.js (deflated 65%)
+  adding: extension/manifest.json (deflated 44%)
+ln --symbolic --force build.1OQC8F/extension.zip extension.zip
+----

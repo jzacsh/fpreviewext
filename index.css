@@ -1,0 +1,21 @@
+ul#imagebrowse {
+  margin: 1em 0;
+  padding: 0;
+  border-top: 1px dotted black;
+  font-family: monospace;
+  text-align: center;
+}
+
+ul#imagebrowse li {
+  padding: 1ex;
+  display: inline-block;
+  max-width: 30%;
+  overflow-x: hidden;
+}
+
+ul#imagebrowse .preview,
+ul#imagebrowse .caption {
+  max-width: 100%;
+}
+
+ul#imagebrowse .caption { width: 100%; }
