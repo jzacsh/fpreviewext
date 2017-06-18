@@ -1,15 +1,15 @@
 {
   "manifest_version": 2,
   "name": "Image Browser",
-  "version": "0.0.1",
+  "version": "VERSION_NUM",
 
-  "description": "Turns file:/// pages containing images into grid-style galleries, like typical desktop file browsers",
+  "description": "Adds gallery preview to file:// pages per Git @GITREF",
 
   "page_action": {
     "default_title": "Injects Gallery Grid into File Browsing"
   },
   "author": "https://j.jzac.sh",
-  "homepage_url": "https://github.com/jzacsh/fpreviewext",
+  "homepage_url": "https://github.com/jzacsh/fpreviewext/tree/GITREF",
   "content_scripts": [
     {
       "matches": ["file://*"],
