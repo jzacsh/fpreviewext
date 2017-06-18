@@ -9,6 +9,7 @@
     "default_title": "Injects Gallery Grid into File Browsing"
   },
   "author": "https://j.jzac.sh",
+  "homepage_url": "https://github.com/jzacsh/fpreviewext",
   "content_scripts": [
     {
       "matches": ["file://*"],
