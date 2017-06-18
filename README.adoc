@@ -1,4 +1,7 @@
 = `file://` browsing with thumbnails & previews
+:iconic: https://github.com/iconic/open-iconic/tree/1d1e8885c503187
+:icofolder: https://github.com/iconic/open-iconic/tree/1d1e8885c503187/svg/folder.svg
+:icoimg: https://github.com/iconic/open-iconic/tree/1d1e8885c503187/svg/image.svg
 :buildcrx: https://github.com/jzacsh/bin/blob/65a3a4ee7902/share/buildcrx
 
 Particularly useful at the moment while all my linux tooling is confused by
@@ -49,3 +52,7 @@ ln --symbolic --force build.1OQC8F/extension.zip extension.zip
 . major or minor version is kept in `./major.minor`
 . `make extension.crx` auto-builds full semver string
 .. run make target *after* committing  for accurate patch numbers
+
+== License
+See `./LICENSE` for more. Icon is crafted from {icofolder}[these] {icoimg}[two]
+{iconic}[Iconic icons]

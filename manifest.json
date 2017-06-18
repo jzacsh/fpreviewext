@@ -5,6 +5,7 @@
 
   "description": "Adds gallery preview to file:// pages per Git @GITREF",
 
+  "icons": {"128": "icon.png"},
   "page_action": {
     "default_title": "Injects Gallery Grid into File Browsing"
   },
