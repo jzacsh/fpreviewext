@@ -1,8 +1,10 @@
+#imagebrowse > ul,
+#imagebrowse > .status { font-family: monospace;  }
+
 #imagebrowse > ul {
   margin: 1em 0;
   padding: 0;
   border-top: 1px dotted black;
-  font-family: monospace;
   text-align: center;
 }
 

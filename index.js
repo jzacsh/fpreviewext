@@ -8,6 +8,7 @@ const FEATURES = {
 /** @const {!Object.<string, string|number>} */
 const CONFIG = {
   GRID_LATTICE_RATIO: .25, // (0,1]
+  RENDER_FRAME_BYTES_LIMIT: 4000000, // 4M
 };
 
 
@@ -78,6 +79,9 @@ class Img {
    */
   get widthStyle_() { return this.bodyWidthPx_ * CONFIG.GRID_LATTICE_RATIO + 'px'; }
 
+  /** @return {number} */
+  get bytes() { return this.size_.bytes; }
+
   /**
    * @return {number}
    * @private
@@ -114,20 +118,26 @@ class ImageListing {
   get isMixed() { return listingLen != this.length; }
 
   /**
-   * Thin wrapper for {@link Img#buildEl}.
    * @param {number} index
-   * @return {!Element}
+   * @return {!Img}
    */
-  buildImage(index) {
+  get(index) {
     if (index < 0 || index > this.length - 1) {
       throw new Error(
           'invalid image index ' +
           index + ' requested, expected [0,' +
           this.length + ')');
     }
-
-    return this.filtered_[index].buildEl();
+    return this.filtered_[index];
   }
+
+  /**
+   * Thin wrapper for {@link Img#buildEl}.
+   * @param {number} index
+   * @return {!Element}
+   */
+  // TODO(zacsh) convert calls to this to `get` and `buildEl` call chained together
+  buildImage(index) { return this.get(index).buildEl(); }
 
 
   /**
@@ -177,7 +187,8 @@ class Grid {
     this.hasBuilt_ = false;
 
     /**
-     * Array index of {@link #listing_}.
+     * Array index of {@link #listing_} indicating the next image still waiting
+     * to be rendered.
      * @private {number}
      */
     this.renderIndex_ = 0;
@@ -197,18 +208,52 @@ class Grid {
     this.contanerEl_.appendChild(this.statusEl_);
   }
 
-  build() {
+  startRender() {
     if (this.hasBuilt_) {
-      throw new Error('build() called more than once');
+      throw new Error('startRender() called more than once');
     }
     this.hasBuilt_ = true;
 
-    for (let i = 0; i < this.listing_.length; ++i) {
-      let liEl = document.createElement('li');
-      liEl.appendChild(this.listing_.buildImage(i));
-      this.gridListEl_.appendChild(liEl);
-    }
+    this.renderMore_();
   }
+
+  /**
+   * @return {boolean}
+   * @private
+   */
+  haveUnrendereds_() { return this.renderIndex_ < this.listing_.length; }
+
+  /**
+   * Recursive rendering queue
+   * @private
+   */
+  renderMore_ () {
+    let renderedSize = 0; // size of images we've clobbered the DOM with
+    while (this.haveUnrendereds_() && Grid.isSmallRenderFrame_(renderedSize)) {
+      let img = this.listing_.get(this.renderIndex_);
+
+      let liEl = document.createElement('li');
+      liEl.appendChild(img.buildEl());
+      this.gridListEl_.appendChild(liEl);
+
+      renderedSize += img.bytes;
+      this.renderIndex_++;
+    }
+
+    if (!this.haveUnrendereds_()) {
+      return; // We're done
+    }
+
+    window.requestAnimationFrame(this.renderMore_.bind(this));
+  }
+
+  /**
+   * @param {number} cumFileSize
+   *    Total cumulative byte count of image files added to DOM for rendering,
+   *    within a single render frame.
+   * @return {boolean}
+   */
+  static isSmallRenderFrame_(cumFileSize) { return cumFileSize < CONFIG.RENDER_FRAME_BYTES_LIMIT; }
 }
 
 /** @type {!ImageListing} */
@@ -218,7 +263,7 @@ let listing = new ImageListing(document.querySelectorAll('tbody tr'));
 if (listing.length) {
   if (FEATURES.GRID_LAYOUT) {
     // console.log('rendering grid layout');
-    new Grid(listing).build();
+    new Grid(listing).startRender();
   } else {
     // console.log('rendering inlined-images layout');
     throw new Error('\tJK! not yet implemented');
