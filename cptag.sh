@@ -48,10 +48,10 @@ tagManifest() (
   local manifest="$1"
 
   local gitRef; gitRef="$(git rev-parse HEAD | cut  -c 1-8)"
-  sed -i 's|GITREF|'"$gitRef"'|g' "$manifest"
+  ( set -x; sed -i 's|GITREF|'"$gitRef"'|g' "$manifest"; )
 
   local autoVerStr; autoVerStr="$(buildSemVer)"
-  sed -i 's|VERSION_NUM|'"$autoVerStr"'|g' "$manifest"
+  ( set -x; sed -i 's|VERSION_NUM|'"$autoVerStr"'|g' "$manifest"; )
 )
 
 for f in "$@";do
