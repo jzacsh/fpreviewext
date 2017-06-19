@@ -8,7 +8,7 @@ const FEATURES = {
 /** @const {!Object.<string, string|number>} */
 const CONFIG = {
   GRID_LATTICE_RATIO: .25, // (0,1]
-  RENDER_FRAME_BYTES_LIMIT: 4000000, // 4M
+  RENDER_FRAME_BYTES_LIMIT: 1500000, // 4M
 };
 
 
