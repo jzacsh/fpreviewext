@@ -89,7 +89,7 @@ class Img {
 }
 
 /** @const {!RegExp} */
-const IMG_EXT_REGEXP = /\.(png|jpe?g|webp|tiff|gif)$/;
+const IMG_EXT_REGEXP = /\.(png|svg|jpe?g|webp|tiff|gif)$/;
 
 class ImageListing {
   /** @param {!Element} trs */
