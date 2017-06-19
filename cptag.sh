@@ -34,12 +34,15 @@ declare -r vfPath
 semVer="$(< "$vfPath")"; declare -r semVer
 [[ -n "$semVer" ]] || die 'expected sibling %s file is empty\n' "$versFile"
 
+isGitDirty() ( [[ "$(git status --porcelain | wc -l)" -eq 0 ]]; )
+
 buildSemVer() (
   local minorBumpedAt
   minorBumpedAt="$(git log --max-count=1 --format=%H "$vfPath")"
 
   local patchesSince # INCLUDING current dirty staging's commit
   patchesSince=$(git rev-list "$minorBumpedAt"..HEAD | wc -l)
+  if isGitDirty;then patchesSince=$(( patchesSince + 1 )); fi
 
   printf '%s.%d' "$semVer" "$patchesSince"
 )
