@@ -175,6 +175,26 @@ class Grid {
 
     /** @private {boolean} */
     this.hasBuilt_ = false;
+
+    /**
+     * Array index of {@link #listing_}.
+     * @private {number}
+     */
+    this.renderIndex_ = 0;
+
+    /** @private {!Element} */
+    this.contanerEl_ = document.createElement('div');
+    this.contanerEl_.setAttribute('id', 'imagebrowse');
+    document.body.appendChild(this.contanerEl_);
+
+    /** @private {!Element} */
+    this.gridListEl_ = document.createElement('ul');
+    this.contanerEl_.appendChild(this.gridListEl_);
+
+    /** @private {!Element} */
+    this.statusEl_ = document.createElement('p');
+    this.statusEl_.setAttribute('class', 'status');
+    this.contanerEl_.appendChild(this.statusEl_);
   }
 
   build() {
@@ -183,14 +203,11 @@ class Grid {
     }
     this.hasBuilt_ = true;
 
-    let ulEl = document.createElement('ul');
-    ulEl.setAttribute('id', 'imagebrowse');
     for (let i = 0; i < this.listing_.length; ++i) {
       let liEl = document.createElement('li');
       liEl.appendChild(this.listing_.buildImage(i));
-      ulEl.appendChild(liEl);
+      this.gridListEl_.appendChild(liEl);
     }
-    document.body.appendChild(ulEl);
   }
 }
 
