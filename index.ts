@@ -161,7 +161,7 @@ class Grid {
     this.contanerEl_.appendChild(this.statusEl_);
   }
 
-  startRender() {
+  startRender() : void {
     if (this.hasBuilt_) {
       throw new Error('startRender() called more than once');
     }
@@ -173,7 +173,7 @@ class Grid {
   private haveUnrendereds_() : boolean { return this.renderIndex_ < this.listing_.length; }
 
   /** Recursive rendering queue */
-  private renderMore_ () {
+  private renderMore_ () : void {
     let renderedSize = 0; // size of images we've clobbered the DOM with
     while (this.haveUnrendereds_() && Grid.isSmallRenderFrame_(renderedSize)) {
       let img = this.listing_.get(this.renderIndex_);
