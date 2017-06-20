@@ -1,7 +1,7 @@
 import { ImageListing } from './flisting';
 import { Config } from './config';
 
-export default class Grid {
+export class Grid {
   private listing_: ImageListing;
   private hasBuilt_: boolean;
   /**

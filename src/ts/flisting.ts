@@ -1,4 +1,5 @@
 import { Config } from './config';
+import panicif from './assert';
 
 interface HumanMachine {
   machine: number;
@@ -60,13 +61,20 @@ class Img {
   get bytes() : number { return this.size_.machine; }
 
   private static scrapeBodyWidth_() : number {
-    const px = window.getComputedStyle(document.body).width;
-    return parseInt(px.replace(/px/, '') + "", 10);
-    // TODO(zacsh) actually error check rather than magic casting about
+    const pxRaw = window.getComputedStyle(document.body).width;
+
+    panicif(!pxRaw, 'DOM failed to report computedStyle width');
+    let px = pxRaw!.replace(/px/, '')!;
+
+    panicif(!px, 'failed to parse pixel value');
+    let width = parseInt(px!, 10);
+
+    panicif(!width, 'failed to parse pixel integer');
+    return width!;
   }
 }
 
-export default class ImageListing {
+export class ImageListing {
   private dirLsLen_: number
   private filtered_: Array<Img>
   constructor(trs: NodeListOf<Element>) {
@@ -104,13 +112,14 @@ export default class ImageListing {
     for (let i = 0; i < trs.length; ++i) {
       let tds = trs[i].querySelectorAll('td');
       let fname = tds[0].getAttribute('data-value');
-      if (!ImageListing.isLikelyImage_(fname)) {
+      panicif(!fname, 'failed to read data-value from first <td>');
+      if (!ImageListing.isLikelyImage_(fname!)) {
         continue;
       }
 
       imgs[count] = new Img(
           trs[i],  // parentEl
-          fname,  // fileName
+          fname!,  // fileName
           tds[1],  // sizeEl
           tds[2]  /*modTimeEl*/);
       count++;
