@@ -5,7 +5,6 @@ enum Layout {
 enum Config {
   GRID_LATTICE_RATIO = .25, // (0,1]
   RENDER_FRAME_BYTES_LIMIT = 1500000, // 4M
-  LAYOUT = Layout.GRID,
 }
 
 interface HumanMachine {
@@ -203,12 +202,14 @@ class Grid {
   }
 }
 
+const LAYOUT : Layout = Layout.GRID;
+
 /** @type {!ImageListing} */
 let listing = new ImageListing(document.querySelectorAll('tbody tr'));
 
 // console.log('found %d images of %d files....', listing.length, listing.listingSize);
 if (listing.length) {
-  if (Config.LAYOUT) {
+  if (LAYOUT == Layout.GRID) {
     // console.log('rendering grid layout');
     new Grid(listing).startRender();
   } else {
