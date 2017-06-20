@@ -16,7 +16,7 @@
     {
       "matches": ["file://*"],
       "css": ["index.css"],
-      "js": ["index.js"],
+      "js": ["bundle.js"],
       "include_globs": ["file://*/"]
     }
   ],

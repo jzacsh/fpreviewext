@@ -8,17 +8,21 @@ EXT_DIR   :=  $(BUILDDIR)/$(OUT_NAME)
 TYPESCPS  :=  $(wildcard $(SRC_DIR)/ts/*.ts)
 BUILT_JS  :=  $(BUILDDIR)/js
 JAVASCPS  :=  $(BUILT_JS)/index.js
+PACKEDJS  :=  $(BUILDDIR)/bundle.js
 
 # requires of buildcrx in $PATH; see:
 #   https://github.com/jzacsh/bin/blob/65a3a4ee7902/share/buildcrx
-$(CRX_FILE) $(ZIP_FILE): $(SRC_DIR)/manifest.json $(JAVASCPS) $(SRC_DIR)/index.css $(BUILDDIR)/icon.png
+$(CRX_FILE) $(ZIP_FILE): $(SRC_DIR)/manifest.json $(PACKEDJS) $(SRC_DIR)/index.css $(BUILDDIR)/icon.png
 	$(shell mkdir -p $(EXT_DIR))
 	$(shell $(BIN_DIR)/cptag.sh $(EXT_DIR) $^)
 	cd $(BUILDDIR) && ../$(BIN_DIR)/buildcrx $(OUT_NAME) $(PRIVATEK)
 	ln --symbolic --force $(BUILDDIR)/$(CRX_FILE) $(CRX_FILE)
 
+$(PACKEDJS): $(JAVASCPS)
+	$(BIN_DIR)/webpack --config webpack.config.js
+
 $(JAVASCPS): $(TYPESCPS)
-	tsc --outDir $(BUILT_JS)
+	$(BIN_DIR)/tsc --outDir $(BUILT_JS)
 
 $(BUILDDIR)/icon.png: $(SRC_DIR)/icon.svg
 	mogrify -resize 128x128 -background none -format png $<

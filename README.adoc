@@ -19,8 +19,10 @@ Can be installed {crwebstore}[directly from the webstore here]
 
 == contributing
 
-Build command below assume you have a {buildcrx}[`buildcrx`] somewhere in your
-`$PATH` _(be it the one I use or another)_.
+.prerequisites
+`npm`, `node` are assumed to be in your `$PATH`. Also expected in your `$PATH`
+by some of the build steps are: `mogrify` _(imagemagick)_, `readlink`, `sed`,
+`ln` _(and others I'll guess are "safe" to assume you should have)_.
 
 .build "packed" chrome extension
 ----
@@ -59,6 +61,20 @@ ln --symbolic --force build.1OQC8F/extension.zip extension.zip
 . major or minor version is kept in `./major.minor`
 . `make extension.crx` auto-builds full semver string
 .. run make target *after* committing  for accurate patch numbers
+
+.codebase layout
+[options="header"]
+|===
+| file | purpose
+| `Makefile`, `./major.minor` | build & management files
+| `src/` | primary code of this repo
+| `bin/` | `make` helpers or links to dependencies
+| `package.json` | manages dependencies: typescript (`tsc`), and `webpack`
+| `webpack.config.js` | manages `webpack` behavior
+| `tsconfig.json` | manages `tsc` behavior
+| `build/` | volatile temporary directory
+| `node_modules/` | dependency installations
+|===
 
 == License
 See `./LICENSE` for more. Icon is crafted from {icofolder}[these] {icoimg}[two]

@@ -1,0 +1,20 @@
+{
+  "name": "fpreviewcrx",
+  "version": "0.0.0",
+  "description": "See src/manifest.json or README.adoc",
+  "main": "README.adoc",
+  "devDependencies": {
+    "typescript": "^2.3.4",
+    "webpack": "^3.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jzacsh/fpreviewext.git"
+  },
+  "author": "",
+  "license": "GPLv3",
+  "bugs": {
+    "url": "https://github.com/jzacsh/fpreviewext/issues"
+  },
+  "homepage": "https://github.com/jzacsh/fpreviewext#readme"
+}
