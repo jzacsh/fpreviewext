@@ -14,7 +14,7 @@ PACKEDJS  :=  $(BUILDDIR)/bundle.js
 #   https://github.com/jzacsh/bin/blob/65a3a4ee7902/share/buildcrx
 $(CRX_FILE) $(ZIP_FILE): $(SRC_DIR)/manifest.json $(PACKEDJS) $(SRC_DIR)/index.css $(BUILDDIR)/icon.png
 	$(shell mkdir -p $(EXT_DIR))
-	$(shell $(BIN_DIR)/cptag.sh $(EXT_DIR) $^)
+	$(shell $(BIN_DIR)/cptag $(EXT_DIR) $^)
 	cd $(BUILDDIR) && ../$(BIN_DIR)/buildcrx $(OUT_NAME) $(PRIVATEK)
 	ln --symbolic --force $(BUILDDIR)/$(CRX_FILE) $(CRX_FILE)
 
