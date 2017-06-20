@@ -26,59 +26,59 @@ const IMG_EXT_REGEXP = /\.(png|svg|jpe?g|webp|tiff|gif)$/;
  * Data scraped for a single file.
  */
 class Listing {
-  private listing_: Element;
-  private fname_: string;
-  private mtime_: HumanMachine;
-  private size_: HumanMachine;
-  private bodyWidthPx_: number;
-  private type_: MediaType;
+  private listing: Element;
+  private fname: string;
+  private mtime: HumanMachine;
+  private size: HumanMachine;
+  private bodyWidthPx: number;
+  private mediaType: MediaType;
 
   constructor(
     parentEl: Element,
     fileName: string,
     sizeEl: Element,
     modTimeEl: Element) {
-    this.listing_ = parentEl;
-    this.fname_ = fileName;
-    this.type_ = Listing.guessAVType_(fileName);
-    this.mtime_ = {
+    this.listing = parentEl;
+    this.fname = fileName;
+    this.mediaType = Listing.guessAVType(fileName);
+    this.mtime = {
       machine: parseInt(modTimeEl.getAttribute('data-value') + "", 10),
       human: modTimeEl.textContent + "",
     }; // TODO(zacsh) actually error check rather than magic cast to string
 
-    this.size_ = {
+    this.size = {
       machine: parseInt(sizeEl.getAttribute('data-value') + "", 10),
       human: sizeEl.textContent + "",
     }; // TODO(zacsh) actually error check rather than magic cast to string
-    this.bodyWidthPx_ = Listing.scrapeBodyWidth_();
+    this.bodyWidthPx = Listing.scrapeBodyWidth();
   }
 
   /** Some HTML with an <img> element, intended for display. */
   buildEl() : Element {
     let ancEl = document.createElement('a');
-    ancEl.setAttribute('href', this.fname_);
-    let mediaEl = Listing.buildMediaEl(this.avType, this.fname_ /*src*/);
+    ancEl.setAttribute('href', this.fname);
+    let mediaEl = Listing.buildMediaEl(this.avType, this.fname /*src*/);
     mediaEl.setAttribute('class', 'preview');
-    mediaEl.setAttribute('title', this.fname_);
-    mediaEl.setAttribute('width', this.widthStyle_);
+    mediaEl.setAttribute('title', this.fname);
+    mediaEl.setAttribute('width', this.widthStyle);
 
     ancEl.appendChild(mediaEl);
     ancEl.appendChild(document.createElement('br'));
     let captionEl = document.createElement('div');
-    captionEl.textContent = this.fname_;
+    captionEl.textContent = this.fname;
     captionEl.setAttribute('class', 'caption');
     ancEl.appendChild(captionEl);
     return ancEl;
   }
 
   /** Audio/Visual (AV) media type. */
-  get avType() : MediaType { return this.type_; }
+  get avType() : MediaType { return this.mediaType; }
 
-  private get widthStyle_() : string {
-    return this.bodyWidthPx_ * Config.GRID_LATTICE_RATIO + 'px';
+  private get widthStyle() : string {
+    return this.bodyWidthPx * Config.GRID_LATTICE_RATIO + 'px';
   }
 
-  get bytes() : number { return this.size_.machine; }
+  get bytes() : number { return this.size.machine; }
 
   private static buildMediaEl(avType: MediaType, url: string) : Element {
     let el;
@@ -107,7 +107,7 @@ class Listing {
     }
   }
 
-  private static scrapeBodyWidth_() : number {
+  private static scrapeBodyWidth() : number {
     const pxRaw = window.getComputedStyle(document.body).width;
 
     panicif(!pxRaw, 'DOM failed to report computedStyle width');
@@ -121,10 +121,10 @@ class Listing {
   }
 
   static isAVMedia(basename: string) : boolean {
-    return Listing.guessAVType_(basename) != MediaType.NotAV;
+    return Listing.guessAVType(basename) != MediaType.NotAV;
   };
 
-  private static guessAVType_(filename: string) : MediaType {
+  private static guessAVType(filename: string) : MediaType {
     let file = filename.toLowerCase();
 
     if (file.match(IMG_EXT_REGEXP)) {
@@ -144,18 +144,18 @@ class Listing {
 }
 
 export class MediaListing {
-  private dirLsLen_: number
-  private filtered_: Array<Listing>
+  private dirLsLen: number
+  private filtered: Array<Listing>
   constructor(trs: NodeListOf<Element>) {
-    this.dirLsLen_ = trs.length;
-    this.filtered_ = MediaListing.filterMedia_(this.dirLsLen_, trs);
+    this.dirLsLen = trs.length;
+    this.filtered = MediaListing.filterMedia(this.dirLsLen, trs);
   }
 
   get listingSize() : number {
-    return this.dirLsLen_ - 1 /* ignore hardlink to parent dir */;
+    return this.dirLsLen - 1 /* ignore hardlink to parent dir */;
   }
 
-  get length() : number { return this.filtered_.length; }
+  get length() : number { return this.filtered.length; }
 
   get isMixed() : boolean { return this.listingSize != this.length; }
 
@@ -166,10 +166,10 @@ export class MediaListing {
           index + ' requested, expected [0,' +
           this.length + ')');
     }
-    return this.filtered_[index];
+    return this.filtered[index];
   }
 
-  private static filterMedia_(len: number, trs: NodeListOf<Element>) : Array<Listing> {
+  private static filterMedia(len: number, trs: NodeListOf<Element>) : Array<Listing> {
     let media = new Array(len);
 
     let count = 0;

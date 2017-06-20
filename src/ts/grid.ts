@@ -2,64 +2,64 @@ import { MediaListing } from './flisting';
 import { Config } from './config';
 
 export class Grid {
-  private listing_: MediaListing;
-  private hasBuilt_: boolean;
+  private listing: MediaListing;
+  private hasBuilt: boolean;
   /**
-   * Array index of {@link #listing_} indicating the next image still waiting to
+   * Array index of {@link #listing} indicating the next image still waiting to
    * be rendered.
    */
-  private renderIndex_: number;
-  private contanerEl_: Element;
-  private gridListEl_: Element;
-  private statusEl_: Element;
+  private renderIndex: number;
+  private contanerEl: Element;
+  private gridListEl: Element;
+  private statusEl: Element;
 
   constructor(listing: MediaListing) {
-    this.listing_ = listing;
-    this.hasBuilt_ = false;
-    this.renderIndex_ = 0;
+    this.listing = listing;
+    this.hasBuilt = false;
+    this.renderIndex = 0;
 
-    this.contanerEl_ = document.createElement('div');
-    this.contanerEl_.setAttribute('id', 'imagebrowse');
-    document.body.appendChild(this.contanerEl_);
+    this.contanerEl = document.createElement('div');
+    this.contanerEl.setAttribute('id', 'imagebrowse');
+    document.body.appendChild(this.contanerEl);
 
-    this.gridListEl_ = document.createElement('ul');
-    this.contanerEl_.appendChild(this.gridListEl_);
+    this.gridListEl = document.createElement('ul');
+    this.contanerEl.appendChild(this.gridListEl);
 
-    this.statusEl_ = document.createElement('p');
-    this.statusEl_.setAttribute('class', 'status');
-    this.contanerEl_.appendChild(this.statusEl_);
+    this.statusEl = document.createElement('p');
+    this.statusEl.setAttribute('class', 'status');
+    this.contanerEl.appendChild(this.statusEl);
   }
 
   startRender() : void {
-    if (this.hasBuilt_) {
+    if (this.hasBuilt) {
       throw new Error('startRender() called more than once');
     }
-    this.hasBuilt_ = true;
+    this.hasBuilt = true;
 
-    this.renderMore_();
+    this.renderMore();
   }
 
-  private haveUnrendereds_() : boolean { return this.renderIndex_ < this.listing_.length; }
+  private haveUnrendereds() : boolean { return this.renderIndex < this.listing.length; }
 
   /** Recursive rendering queue */
-  private renderMore_ () : void {
+  private renderMore () : void {
     let renderedSize = 0; // size of images we've clobbered the DOM with
-    while (this.haveUnrendereds_() && Grid.isSmallRenderFrame_(renderedSize)) {
-      let img = this.listing_.get(this.renderIndex_);
+    while (this.haveUnrendereds() && Grid.isSmallRenderFrame(renderedSize)) {
+      let img = this.listing.get(this.renderIndex);
 
       let liEl = document.createElement('li');
       liEl.appendChild(img.buildEl());
-      this.gridListEl_.appendChild(liEl);
+      this.gridListEl.appendChild(liEl);
 
       renderedSize += img.bytes;
-      this.renderIndex_++;
+      this.renderIndex++;
     }
 
-    if (!this.haveUnrendereds_()) {
+    if (!this.haveUnrendereds()) {
       return; // We're done
     }
 
-    window.requestAnimationFrame(this.renderMore_.bind(this));
+    window.requestAnimationFrame(this.renderMore.bind(this));
   }
 
   /**
@@ -68,7 +68,7 @@ export class Grid {
    *    within a single render frame.
    * @return {boolean}
    */
-  private static isSmallRenderFrame_(cumFileSize: number) : boolean {
+  private static isSmallRenderFrame(cumFileSize: number) : boolean {
     return cumFileSize < Config.RENDER_FRAME_BYTES_LIMIT;
   }
 }
