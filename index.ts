@@ -1,5 +1,3 @@
-'use strict';
-
 /** @const {!Object.<string, boolean>} */
 const FEATURES = {
   GRID_LAYOUT: true,
@@ -11,43 +9,35 @@ const CONFIG = {
   RENDER_FRAME_BYTES_LIMIT: 1500000, // 4M
 };
 
+interface HumanMachine {
+  machine: number;
+  human: string;
+}
+
 
 class Img {
-  /**
-   * @param {!Element} parentEl
-   * @param {string} fileName
-   * @param {!Element} sizeEl
-   * @param {!Element} modTimeEl
-   */
-  constructor(parentEl, fileName, sizeEl, modTimeEl) {
-    /** @private {!Element} */
-    this.listing_ = parentEl;
-    /** @private {string} */
-    this.fname_ = fileName;
+  listing_: Element;
+  fname_: string;
+  mtime_: HumanMachine;
+  size_: HumanMachine;
+  bodyWidthPx_: number;
 
-    /**
-     * @type {
-     *   stamp: number,
-     *   human: string
-     * }
-     */
+  constructor(
+    parentEl: Element,
+    fileName: string,
+    sizeEl: Element,
+    modTimeEl: Element) {
+    this.listing_ = parentEl;
+    this.fname_ = fileName;
     this.mtime_ = {
-      stamp: parseInt(modTimeEl.getAttribute('data-value'), 10),
+      machine: parseInt(modTimeEl.getAttribute('data-value'), 10),
       human: modTimeEl.textContent,
     };
 
-    /**
-     * @type {
-     *   bytes: number,
-     *   dush: string
-     * }
-     */
     this.size_ = {
-      bytes: parseInt(sizeEl.getAttribute('data-value'), 10),
-      dush: sizeEl.textContent,
+      machine: parseInt(sizeEl.getAttribute('data-value'), 10),
+      human: sizeEl.textContent,
     };
-
-    /* @private {number} */
     this.bodyWidthPx_ = Img.scrapeBodyWidth_();
   }
 
@@ -80,7 +70,7 @@ class Img {
   get widthStyle_() { return this.bodyWidthPx_ * CONFIG.GRID_LATTICE_RATIO + 'px'; }
 
   /** @return {number} */
-  get bytes() { return this.size_.bytes; }
+  get bytes() { return this.size_.machine; }
 
   /**
    * @return {number}
@@ -96,12 +86,10 @@ class Img {
 const IMG_EXT_REGEXP = /\.(png|svg|jpe?g|webp|tiff|gif)$/;
 
 class ImageListing {
-  /** @param {!Element} trs */
-  constructor(trs) {
-    /** @private {number} */
+  dirLsLen_: number
+  filtered_: Array<Img>
+  constructor(trs: NodeListOf<Element>) {
     this.dirLsLen_ = trs.length;
-
-    /** @private {!Array.<Img>} */
     this.filtered_ = ImageListing.filterImages_(this.dirLsLen_, trs);
   }
 
@@ -115,13 +103,10 @@ class ImageListing {
 
 
   /** @return {boolean} */
-  get isMixed() { return listingLen != this.length; }
+  get isMixed() { return this.listingSize != this.length; }
 
-  /**
-   * @param {number} index
-   * @return {!Img}
-   */
-  get(index) {
+  /** @return {!Img} */
+  get(index: number) {
     if (index < 0 || index > this.length - 1) {
       throw new Error(
           'invalid image index ' +
@@ -133,20 +118,17 @@ class ImageListing {
 
   /**
    * Thin wrapper for {@link Img#buildEl}.
-   * @param {number} index
    * @return {!Element}
    */
   // TODO(zacsh) convert calls to this to `get` and `buildEl` call chained together
-  buildImage(index) { return this.get(index).buildEl(); }
+  buildImage(index: number) { return this.get(index).buildEl(); }
 
 
   /**
-   * @param {number} len
-   * @param{!Element} trs
    * @return {!Array.<Img>}
    * @private
    */
-  static filterImages_(len, trs) {
+  static filterImages_(len: number, trs: NodeListOf<Element>) {
     let imgs = new Array(len);
 
     let count = 0;
@@ -168,41 +150,38 @@ class ImageListing {
   }
 
   /**
-   * @param {string} basename
    * @return {boolean}
    * @private
    */
-  static isLikelyImage_(basename) {
+  static isLikelyImage_(basename: string) {
     return Boolean(basename.toLowerCase().match(IMG_EXT_REGEXP));
   };
 }
 
 class Grid {
-  /** @param {!ImageListing} listing */
-  constructor(listing) {
-    /* @private {!ImageListing} */
+  listing_: ImageListing;
+  hasBuilt_: boolean;
+  /**
+   * Array index of {@link #listing_} indicating the next image still waiting to
+   * be rendered.
+   */
+  renderIndex_: number;
+  contanerEl_: Element;
+  gridListEl_: Element;
+  statusEl_: Element;
+
+  constructor(listing: ImageListing) {
     this.listing_ = listing;
-
-    /** @private {boolean} */
     this.hasBuilt_ = false;
-
-    /**
-     * Array index of {@link #listing_} indicating the next image still waiting
-     * to be rendered.
-     * @private {number}
-     */
     this.renderIndex_ = 0;
 
-    /** @private {!Element} */
     this.contanerEl_ = document.createElement('div');
     this.contanerEl_.setAttribute('id', 'imagebrowse');
     document.body.appendChild(this.contanerEl_);
 
-    /** @private {!Element} */
     this.gridListEl_ = document.createElement('ul');
     this.contanerEl_.appendChild(this.gridListEl_);
 
-    /** @private {!Element} */
     this.statusEl_ = document.createElement('p');
     this.statusEl_.setAttribute('class', 'status');
     this.contanerEl_.appendChild(this.statusEl_);
@@ -253,7 +232,9 @@ class Grid {
    *    within a single render frame.
    * @return {boolean}
    */
-  static isSmallRenderFrame_(cumFileSize) { return cumFileSize < CONFIG.RENDER_FRAME_BYTES_LIMIT; }
+  static isSmallRenderFrame_(cumFileSize: number) {
+    return cumFileSize < CONFIG.RENDER_FRAME_BYTES_LIMIT;
+  }
 }
 
 /** @type {!ImageListing} */

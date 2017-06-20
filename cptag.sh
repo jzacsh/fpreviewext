@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+cwd="$(pwd)"; declare -r cwd
 self="$(readlink -f "${BASH_SOURCE[0]}")"; declare -r self
 selfName="$(basename "$self")"; declare -r selfName
 
@@ -57,11 +58,22 @@ tagManifest() (
   ( set -x; sed -i 's|VERSION_NUM|'"$autoVerStr"'|g' "$manifest"; )
 )
 
-for f in "$@";do
-  cp "$f" "$extDir"
+isCopyNecessary() (
+  local src="$(readlink -f "$1")"
+  local dst="$(readlink -f "$2")"
+  [[ "$src" != "$dst" ]]
+)
 
-  b="$(basename "$f")"
+for f in "$@";do
+  src="$cwd"/"$f";
+  b="$(basename "$src")"
+  dst="$extDir"/"$b"
+
+  if isCopyNecessary "$src" "$dst";then
+    cp "$src" "$extDir" || die 'failed to `cp` %s\n' "$f"
+  fi
+
   if [[ "$b" = manifest.json ]];then
-    tagManifest "$extDir"/"$b"
+    tagManifest "$dst"
   fi
 done
