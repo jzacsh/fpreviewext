@@ -1,13 +1,12 @@
-/** @const {!Object.<string, boolean>} */
-const FEATURES = {
-  GRID_LAYOUT: true,
-};
+enum Layout {
+  GRID,
+}
 
-/** @const {!Object.<string, string|number>} */
-const CONFIG = {
-  GRID_LATTICE_RATIO: .25, // (0,1]
-  RENDER_FRAME_BYTES_LIMIT: 1500000, // 4M
-};
+enum Config {
+  GRID_LATTICE_RATIO = .25, // (0,1]
+  RENDER_FRAME_BYTES_LIMIT = 1500000, // 4M
+  LAYOUT = Layout.GRID,
+}
 
 interface HumanMachine {
   machine: number;
@@ -61,7 +60,7 @@ class Img {
   }
 
   private get widthStyle_() : string {
-    return this.bodyWidthPx_ * CONFIG.GRID_LATTICE_RATIO + 'px';
+    return this.bodyWidthPx_ * Config.GRID_LATTICE_RATIO + 'px';
   }
 
   get bytes() : number { return this.size_.machine; }
@@ -200,7 +199,7 @@ class Grid {
    * @return {boolean}
    */
   private static isSmallRenderFrame_(cumFileSize: number) : boolean {
-    return cumFileSize < CONFIG.RENDER_FRAME_BYTES_LIMIT;
+    return cumFileSize < Config.RENDER_FRAME_BYTES_LIMIT;
   }
 }
 
@@ -209,7 +208,7 @@ let listing = new ImageListing(document.querySelectorAll('tbody tr'));
 
 // console.log('found %d images of %d files....', listing.length, listing.listingSize);
 if (listing.length) {
-  if (FEATURES.GRID_LAYOUT) {
+  if (Config.LAYOUT) {
     // console.log('rendering grid layout');
     new Grid(listing).startRender();
   } else {
