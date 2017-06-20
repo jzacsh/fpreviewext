@@ -1,8 +1,8 @@
-import { ImageListing } from './flisting';
+import { MediaListing } from './flisting';
 import { Config } from './config';
 import { Grid } from './grid';
 
-/** @type {!ImageListing} */
-let listing = new ImageListing(document.querySelectorAll('tbody tr'));
+/** @type {!MediaListing} */
+let listing = new MediaListing(document.querySelectorAll('tbody tr'));
 
 new Grid(listing).startRender();

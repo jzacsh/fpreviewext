@@ -9,7 +9,7 @@
 Particularly useful at the moment while all my linux tooling is confused by
 webp, yet I use webp heavily. Good old browsers, though, can do everything.
 
-For now this is just an image previewer, but I imagine I might want to add other
+For now this is just an media previewer, but I imagine I might want to add other
 capabilities in the future.
 
 image:screenshot.webp[

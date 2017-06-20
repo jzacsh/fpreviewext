@@ -1,8 +1,8 @@
-import { ImageListing } from './flisting';
+import { MediaListing } from './flisting';
 import { Config } from './config';
 
 export class Grid {
-  private listing_: ImageListing;
+  private listing_: MediaListing;
   private hasBuilt_: boolean;
   /**
    * Array index of {@link #listing_} indicating the next image still waiting to
@@ -13,7 +13,7 @@ export class Grid {
   private gridListEl_: Element;
   private statusEl_: Element;
 
-  constructor(listing: ImageListing) {
+  constructor(listing: MediaListing) {
     this.listing_ = listing;
     this.hasBuilt_ = false;
     this.renderIndex_ = 0;
