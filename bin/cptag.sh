@@ -28,7 +28,7 @@ shift
 { [[ -d "$extDir" ]] && [[ -w "$extDir" ]]; } ||
   die 'EXT_DIR not a writable directory\n'
 
-vfPath="$(dirname "$self")"/"$versFile" ||
+vfPath="$(dirname "$self")"/../"$versFile" ||
   die 'trouble finding version file, "%s"\n' "$versFile"
 declare -r vfPath
 
