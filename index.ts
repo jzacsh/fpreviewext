@@ -16,11 +16,11 @@ interface HumanMachine {
 
 
 class Img {
-  listing_: Element;
-  fname_: string;
-  mtime_: HumanMachine;
-  size_: HumanMachine;
-  bodyWidthPx_: number;
+  private listing_: Element;
+  private fname_: string;
+  private mtime_: HumanMachine;
+  private size_: HumanMachine;
+  private bodyWidthPx_: number;
 
   constructor(
     parentEl: Element,
@@ -41,11 +41,8 @@ class Img {
     this.bodyWidthPx_ = Img.scrapeBodyWidth_();
   }
 
-  /**
-   * @return {!Element}
-   *     An <img> element intended to display
-   */ // TODO(zacsh) return a div, instead, with caption, linking, etc.
-  buildEl() {
+  /** Some HTML with an <img> element, intended for display. */
+  buildEl() : Element {
     let ancEl = document.createElement('a');
     ancEl.setAttribute('href', this.fname_);
     let imgEl = document.createElement('img');
@@ -63,20 +60,13 @@ class Img {
     return ancEl;
   }
 
-  /**
-   * @return {string}
-   * @private
-   */
-  get widthStyle_() { return this.bodyWidthPx_ * CONFIG.GRID_LATTICE_RATIO + 'px'; }
+  private get widthStyle_() : string {
+    return this.bodyWidthPx_ * CONFIG.GRID_LATTICE_RATIO + 'px';
+  }
 
-  /** @return {number} */
-  get bytes() { return this.size_.machine; }
+  get bytes() : number { return this.size_.machine; }
 
-  /**
-   * @return {number}
-   * @private
-   */
-  static scrapeBodyWidth_() {
+  private static scrapeBodyWidth_() : number {
     const px = window.getComputedStyle(document.body).width;
     return parseInt(px.replace(/px/, ''), 10);
   }
@@ -86,27 +76,22 @@ class Img {
 const IMG_EXT_REGEXP = /\.(png|svg|jpe?g|webp|tiff|gif)$/;
 
 class ImageListing {
-  dirLsLen_: number
-  filtered_: Array<Img>
+  private dirLsLen_: number
+  private filtered_: Array<Img>
   constructor(trs: NodeListOf<Element>) {
     this.dirLsLen_ = trs.length;
     this.filtered_ = ImageListing.filterImages_(this.dirLsLen_, trs);
   }
 
-  /** @return {number} */
-  get listingSize() {
+  get listingSize() : number {
     return this.dirLsLen_ - 1 /* ignore hardlink to parent dir */;
   }
 
-  /** @return {number} */
-  get length() { return this.filtered_.length; }
+  get length() : number { return this.filtered_.length; }
 
+  get isMixed() : boolean { return this.listingSize != this.length; }
 
-  /** @return {boolean} */
-  get isMixed() { return this.listingSize != this.length; }
-
-  /** @return {!Img} */
-  get(index: number) {
+  get(index: number) : Img {
     if (index < 0 || index > this.length - 1) {
       throw new Error(
           'invalid image index ' +
@@ -116,19 +101,12 @@ class ImageListing {
     return this.filtered_[index];
   }
 
-  /**
-   * Thin wrapper for {@link Img#buildEl}.
-   * @return {!Element}
-   */
+  /** Thin wrapper for {@link Img#buildEl}. */
   // TODO(zacsh) convert calls to this to `get` and `buildEl` call chained together
-  buildImage(index: number) { return this.get(index).buildEl(); }
+  buildImage(index: number) : Element { return this.get(index).buildEl(); }
 
 
-  /**
-   * @return {!Array.<Img>}
-   * @private
-   */
-  static filterImages_(len: number, trs: NodeListOf<Element>) {
+  private static filterImages_(len: number, trs: NodeListOf<Element>) : Array<Img> {
     let imgs = new Array(len);
 
     let count = 0;
@@ -149,26 +127,22 @@ class ImageListing {
     return imgs.slice(0, count);
   }
 
-  /**
-   * @return {boolean}
-   * @private
-   */
-  static isLikelyImage_(basename: string) {
+  private static isLikelyImage_(basename: string) : boolean {
     return Boolean(basename.toLowerCase().match(IMG_EXT_REGEXP));
   };
 }
 
 class Grid {
-  listing_: ImageListing;
-  hasBuilt_: boolean;
+  private listing_: ImageListing;
+  private hasBuilt_: boolean;
   /**
    * Array index of {@link #listing_} indicating the next image still waiting to
    * be rendered.
    */
-  renderIndex_: number;
-  contanerEl_: Element;
-  gridListEl_: Element;
-  statusEl_: Element;
+  private renderIndex_: number;
+  private contanerEl_: Element;
+  private gridListEl_: Element;
+  private statusEl_: Element;
 
   constructor(listing: ImageListing) {
     this.listing_ = listing;
@@ -196,17 +170,10 @@ class Grid {
     this.renderMore_();
   }
 
-  /**
-   * @return {boolean}
-   * @private
-   */
-  haveUnrendereds_() { return this.renderIndex_ < this.listing_.length; }
+  private haveUnrendereds_() : boolean { return this.renderIndex_ < this.listing_.length; }
 
-  /**
-   * Recursive rendering queue
-   * @private
-   */
-  renderMore_ () {
+  /** Recursive rendering queue */
+  private renderMore_ () {
     let renderedSize = 0; // size of images we've clobbered the DOM with
     while (this.haveUnrendereds_() && Grid.isSmallRenderFrame_(renderedSize)) {
       let img = this.listing_.get(this.renderIndex_);
@@ -232,7 +199,7 @@ class Grid {
    *    within a single render frame.
    * @return {boolean}
    */
-  static isSmallRenderFrame_(cumFileSize: number) {
+  private static isSmallRenderFrame_(cumFileSize: number) : boolean {
     return cumFileSize < CONFIG.RENDER_FRAME_BYTES_LIMIT;
   }
 }
