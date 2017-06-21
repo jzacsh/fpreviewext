@@ -17,6 +17,9 @@ alt="preview of extension's changes", width="70%"]
 
 Can be installed {crwebstore}[directly from the webstore here]
 
+.TODO
+. add class restriction of `file` to `tr` query
+
 == contributing
 
 .prerequisites
