@@ -1,7 +1,7 @@
 import { Config } from './config';
 import panicif from './assert';
 
-interface HumanMachine {
+export interface HumanMachine {
   machine: number;
   human: string;
 }

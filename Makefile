@@ -33,7 +33,7 @@ $(BUILDDIR)/icon.png: $(SRC_DIR)/icon.svg
 $(BUILDDIR):
 	$(shell mkdir -p $@)
 
-test: $(TS_SPECS)
+test: $(JAVASCPS) $(TS_SPECS)
 	$(BIN_DIR)/karma start
 
 all: clean $(CRX_FILE)

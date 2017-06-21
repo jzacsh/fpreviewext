@@ -8,7 +8,7 @@ module.exports = function (config) {
     exclude: [
     ],
     preprocessors: {
-      'src/ts/*.spec.ts': ['karma-typescript']
+      'src/ts/**.ts': ['karma-typescript']
     },
     reporters: ['progress'],
     port: 9876,
