@@ -20,9 +20,20 @@ Can be installed {crwebstore}[directly from the webstore here]
 == contributing
 
 .prerequisites
-`npm`, `node` are assumed to be in your `$PATH`. Also expected in your `$PATH`
-by some of the build steps are: `mogrify` _(imagemagick)_, `readlink`, `sed`,
-`ln` _(and others I'll guess are "safe" to assume you should have)_.
+1. `$PATH` has some stuff in it, like `npm`, `node` but also some utils: +
+  _(none of which i'm guessing are "safe" to assume; eg: if you're on OSX)_
+  . `mogrify` _(imagemagick)_
+  . `readlink`
+  . `sed`
+  . `ln`
+2. `npm install`
+
+.run unit tests
+----
+$ make test
+karma start
+...
+----
 
 .build "packed" chrome extension
 ----
