@@ -6,6 +6,7 @@ BIN_DIR   :=  bin
 BUILDDIR  :=  build
 EXT_DIR   :=  $(BUILDDIR)/$(OUT_NAME)
 TYPESCPS  :=  $(wildcard $(SRC_DIR)/ts/*.ts)
+TS_SPECS  :=  $(wildcard $(SRC_DIR)/ts/*.spec.ts)
 BUILT_JS  :=  $(BUILDDIR)/js
 JAVASCPS  :=  $(BUILT_JS)/index.js
 PACKEDJS  :=  $(BUILDDIR)/bundle.js
@@ -32,9 +33,12 @@ $(BUILDDIR)/icon.png: $(SRC_DIR)/icon.svg
 $(BUILDDIR):
 	$(shell mkdir -p $@)
 
+test: $(TS_SPECS)
+	$(BIN_DIR)/karma start
+
 all: clean $(CRX_FILE)
 
 clean:
 	$(RM) -rf $(OUT_NAME).* $(BUILDDIR)
 
-.PHONY: clean all
+.PHONY: clean all test
