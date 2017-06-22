@@ -17,7 +17,7 @@ export enum MediaType {
 const VIDEO_EXT_REGEXP = /\.(mp4|ogv|ogg|webm|mpe?g|3gp)$/;
 
 /** @const {!RegExp} */
-const AUDIO_EXT_REGEXP = /\.(m4a|mp3)$/;
+const AUDIO_EXT_REGEXP = /\.(m4a|mp3|flac)$/;
 
 /** @const {!RegExp} */
 const IMG_EXT_REGEXP = /\.(png|svg|jpe?g|webp|tiff|gif)$/;
