@@ -13,14 +13,38 @@ export enum MediaType {
   NotAV,
 }
 
-/** @const {!RegExp} */
-const VIDEO_EXT_REGEXP = /\.(mp4|ogv|ogg|webm|mpe?g|3gp)$/;
+function extsToRegexp(exts: Array<string>): RegExp {
+  let regExp = '\.(';
+  for (let i = 0; i < exts.length; ++i) {
+    regExp += exts[i] + '|';
+  }
+  regExp = regExp.substring(0, regExp.length - 1); // remove last "|" or
+  regExp += ')$';
+  return new RegExp(regExp);
+}
 
-/** @const {!RegExp} */
-const AUDIO_EXT_REGEXP = /\.(m4a|mp3|flac|opus)$/;
-
-/** @const {!RegExp} */
-const IMG_EXT_REGEXP = /\.(png|svg|jpe?g|webp|tiff|gif)$/;
+const VIDEO_EXT_REGEXP: RegExp = extsToRegexp([
+  'mp4',
+  'ogv',
+  'ogg',
+  'webm',
+  'mpe?g',
+  '3gp',
+]);
+const AUDIO_EXT_REGEXP: RegExp = extsToRegexp([
+  'm4a',
+  'mp3',
+  'flac',
+  'opus'
+]);
+const IMG_EXT_REGEXP: RegExp = extsToRegexp([
+  'png',
+  'svg',
+  'jpe?g',
+  'webp',
+  'tiff',
+  'gif',
+]);
 
 /**
  * Data scraped for a single file.
