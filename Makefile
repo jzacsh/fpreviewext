@@ -35,13 +35,18 @@ $(BUILDDIR):
 
 test: all $(JAVASCPS) $(TS_SPECS)
 	$(BIN_DIR)/karma start karma.conf.js --single-run
+	$(MAKE) coverage
 
 tdd: $(JAVASCPS) $(TS_SPECS)
 	$(BIN_DIR)/karma start
+
+coverage: SHELL:=/bin/bash
+coverage:
+	w3m -dump -T text/html < $(BUILDDIR)/coverage/*/lcov-report/index.html
 
 all: clean $(CRX_FILE)
 
 clean:
 	$(RM) -rf $(OUT_NAME).* $(BUILDDIR)
 
-.PHONY: clean all tdd test
+.PHONY: clean all tdd test coverage
