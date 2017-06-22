@@ -4,19 +4,18 @@ import { expect } from 'chai';
 
 import * as mck from './fixture.domharness';
 
-const mockTableHtml = mck.buildTableStr('p/stuff/', 'MediaListing-vidoes', [
-  mck.buildRow("foo.html", mck.hm(123, '123 B'), mck.hm(432, '432 secs')),
-  mck.buildRow("bar.mp4", mck.hm(34809, '33 KB'), mck.hm(431, '400+ s. since epoch')),
-  mck.buildRow("thing.webm", mck.hm(13913, '14 KB'), mck.hm(194, '200+ s. since epoch')),
-]);
-
 describe('MediaListing of videos', () => {
+  const mockTableHtml = mck.buildTableStr('p/stuff/', 'MediaListing-vidoes', [
+    mck.buildRow("foo.html", mck.hm(123, '123 B'), mck.hm(432, '432 secs')),
+    mck.buildRow("bar.mp4", mck.hm(34809, '33 KB'), mck.hm(431, '400+ s. since epoch')),
+    mck.buildRow("thing.webm", mck.hm(13913, '14 KB'), mck.hm(194, '200+ s. since epoch')),
+  ]);
+
   let m : MediaListing;
-  let trs: NodeListOf<Element>;
   beforeEach(function() {
     // TODO(zacsh)rule out that `spyOn` isn't more appropriate here
     document.body.insertAdjacentHTML('afterbegin', mockTableHtml);
-    trs = document.querySelectorAll('table#MediaListing-vidoes tbody > tr');
+    let trs = document.querySelectorAll('table#MediaListing-vidoes tbody > tr');
     expect(trs.length).to.equal(4); // including parent directory
     m = new MediaListing(trs);
   })
