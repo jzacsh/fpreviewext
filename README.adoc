@@ -19,7 +19,6 @@ Can be installed {crwebstore}[directly from the webstore here]
 
 .TODO
 . add code coverage
-. add class restriction of `file` to `tr` query
 
 == contributing
 

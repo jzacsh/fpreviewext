@@ -18,6 +18,39 @@ function tearDownTestbed(id: string) : void {
   document.body.removeChild(mockTableEl!);
 }
 
+describe('MediaListing sub directories', () => {
+  const testBedId = 'MediaListing-subdirs';
+  const mockTableHtml = mck.buildTableStr('p/stuff/', testBedId, [
+    mck.buildRow("nils frahm.mp3", mck.hm(2851772, '2.8 M'), mck.hm(993, '993 secs')),
+    mck.buildRow("henson.opus", mck.hm(17348923, '17 M'), mck.hm(3882, '3882 s. since epoch')),
+  ]);
+
+  let m : MediaListing;
+  let trs : NodeListOf<Element>;
+  beforeEach(function() {
+    trs = setupTestbed(testBedId, mockTableHtml).querySelectorAll('tbody > tr');
+    expect(trs.length).to.equal(3); // including parent directory
+  });
+
+  afterEach(tearDownTestbed.bind(null, testBedId));
+
+  it('should ignore parent directory hardlink', function() {
+    m = new MediaListing(trs);
+    expect(trs.length).to.equal(3);
+    expect(trs.length).to.be.above(m.length);
+    expect(m.length).to.equal(2);
+  });
+
+  it('should ignore directories with tricky names', function() {
+    let anch = trs[1].children[0]/*<td>*/.children[0];
+    expect(anch.getAttribute('class')).to.equal('icon file');
+    anch.setAttribute('class', 'icon dir');
+    expect(anch.getAttribute('class')).to.equal('icon dir');
+    m = new MediaListing(trs);
+    expect(m.length).to.equal(1);
+  });
+});
+
 describe('MediaListing of videos', () => {
   const testBedId = 'MediaListing-vidoes';
   const mockTableHtml = mck.buildTableStr('p/stuff/', testBedId, [

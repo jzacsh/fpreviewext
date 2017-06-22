@@ -199,6 +199,10 @@ export class MediaListing {
     let count = 0;
     for (let i = 0; i < trs.length; ++i) {
       let tds = trs[i].querySelectorAll('td');
+      if (MediaListing.isDirectory(tds[0])) {
+        continue;
+      }
+
       let fname = tds[0].getAttribute('data-value');
       panicif(!fname, 'failed to read data-value from first <td>');
       if (!Listing.isAVMedia(fname!)) {
@@ -213,5 +217,11 @@ export class MediaListing {
       count++;
     }
     return media.slice(0, count);
+  }
+
+  private static isDirectory(td: Element) : boolean {
+    // NOTE: alternatively we can just check the filename has a trailing slash
+    let klass = td.children[0].getAttribute('class');
+    return klass == 'icon dir' || klass == 'icon up';
   }
 }
