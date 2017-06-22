@@ -38,7 +38,7 @@ describe('MediaListing of videos', () => {
     expect(m.isMixed).to.equal(true); // foo.html is not AV
   });
 
-  it('get(...).buildEl()', function() {
+  it('get(...).avType', function() {
     expect(m.get(0).avType).to.equal(MediaType.Video);
     expect(m.get(1).avType).to.equal(MediaType.Video);
   });
