@@ -1,4 +1,4 @@
-import { MediaListing } from './flisting';
+import { MediaType, MediaListing } from './flisting';
 import { Config } from './config';
 import { expect } from 'chai';
 
@@ -30,23 +30,27 @@ describe('MediaListing of videos', () => {
   it('#listingSize getter', function() {
     expect(m.listingSize).to.equal(3);
   });
+
   it('#length getter', function() {
     expect(m.length).to.equal(2); // bar.mp4 and thing.webm
   });
+
   it('#isMixed getter', function() {
     expect(m.isMixed).to.equal(true); // foo.html is not AV
   });
 
   it('get(...).buildEl()', function() {
-    expect(m.length).to.equal(2); // sanity check
+    expect(m.get(0).avType).to.equal(MediaType.Video);
+    expect(m.get(1).avType).to.equal(MediaType.Video);
+  });
 
+  it('get(...).buildEl()', function() {
     const barMp4El = m.get(0).buildEl();
     expect(barMp4El.nodeName).to.equal('A');
     expect(barMp4El.getAttribute('href')).to.equal('bar.mp4');
     expect(barMp4El.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
     expect(barMp4El.children[0].nodeName).to.equal('VIDEO');
     expect(barMp4El.children[0].textContent).to.equal('Preview of bar.mp4');
-
     expect(barMp4El.children[2].getAttribute('class')).to.equal('caption');
     expect(barMp4El.children[2].textContent).to.equal('bar.mp4');
 
@@ -56,7 +60,6 @@ describe('MediaListing of videos', () => {
     expect(thingWebmEl.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
     expect(thingWebmEl.children[0].nodeName).to.equal('VIDEO');
     expect(thingWebmEl.children[0].textContent).to.equal('Preview of thing.webm');
-
     expect(thingWebmEl.children[2].getAttribute('class')).to.equal('caption');
     expect(thingWebmEl.children[2].textContent).to.equal('thing.webm');
   });

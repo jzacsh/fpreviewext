@@ -6,7 +6,7 @@ export interface HumanMachine {
   human: string;
 }
 
-enum MediaType {
+export enum MediaType {
   Picture,
   Video,
   Audio,
