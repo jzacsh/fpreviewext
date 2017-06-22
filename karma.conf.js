@@ -6,7 +6,11 @@ module.exports = function (config) {
     files: ['src/ts/*.spec.ts'],
     exclude: [],
     preprocessors: {'src/ts/*.ts': ['webpack']},
-    reporters: ['progress'],
+    reporters: ['progress', 'coverage'],
+    coverageReporter: {
+      type: 'lcov',
+      dir: 'build/coverage/',
+    },
     port: 9876,
     colors: true,
     logLevel: config.LOG_INFO,
