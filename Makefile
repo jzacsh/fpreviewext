@@ -33,7 +33,10 @@ $(BUILDDIR)/icon.png: $(SRC_DIR)/icon.svg
 $(BUILDDIR):
 	$(shell mkdir -p $@)
 
-test: $(JAVASCPS) $(TS_SPECS)
+test: all $(JAVASCPS) $(TS_SPECS)
+	$(BIN_DIR)/karma start karma.conf.js --single-run
+
+tdd: $(JAVASCPS) $(TS_SPECS)
 	$(BIN_DIR)/karma start
 
 all: clean $(CRX_FILE)
@@ -41,4 +44,4 @@ all: clean $(CRX_FILE)
 clean:
 	$(RM) -rf $(OUT_NAME).* $(BUILDDIR)
 
-.PHONY: clean all test
+.PHONY: clean all tdd test
