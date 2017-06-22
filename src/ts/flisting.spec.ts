@@ -4,8 +4,23 @@ import { expect } from 'chai';
 
 import * as mck from './fixture.domharness';
 
+function setupTestbed(id: string, testBedHTML: string) : Element {
+  // TODO(zacsh)rule out that `spyOn` isn't more appropriate here
+  document.body.insertAdjacentHTML('afterbegin', testBedHTML);
+  let testBed = document.getElementById(id);
+  expect(testBed).to.be.ok;
+  return testBed!;
+}
+
+function tearDownTestbed(id: string) : void {
+  let mockTableEl = document.getElementById(id)
+  expect(mockTableEl, 'missing mock testbed ID=' + id).to.be.ok;
+  document.body.removeChild(mockTableEl!);
+}
+
 describe('MediaListing of videos', () => {
-  const mockTableHtml = mck.buildTableStr('p/stuff/', 'MediaListing-vidoes', [
+  const testBedId = 'MediaListing-vidoes';
+  const mockTableHtml = mck.buildTableStr('p/stuff/', testBedId, [
     mck.buildRow("foo.html", mck.hm(123, '123 B'), mck.hm(432, '432 secs')),
     mck.buildRow("bar.mp4", mck.hm(34809, '33 KB'), mck.hm(431, '400+ s. since epoch')),
     mck.buildRow("thing.webm", mck.hm(13913, '14 KB'), mck.hm(194, '200+ s. since epoch')),
@@ -13,18 +28,12 @@ describe('MediaListing of videos', () => {
 
   let m : MediaListing;
   beforeEach(function() {
-    // TODO(zacsh)rule out that `spyOn` isn't more appropriate here
-    document.body.insertAdjacentHTML('afterbegin', mockTableHtml);
-    let trs = document.querySelectorAll('table#MediaListing-vidoes tbody > tr');
+    let trs = setupTestbed(testBedId, mockTableHtml).querySelectorAll('tbody > tr');
     expect(trs.length).to.equal(4); // including parent directory
     m = new MediaListing(trs);
-  })
+  });
 
-  afterEach(function() {
-    let mockTableEl = document.getElementById('MediaListing-vidoes')
-    expect(mockTableEl, 'missing mock testbed').to.be.ok;
-    document.body.removeChild(mockTableEl!);
-  })
+  afterEach(tearDownTestbed.bind(null /*this*/, testBedId));
 
   it('#listingSize getter', function() {
     expect(m.listingSize).to.equal(3);
@@ -62,10 +71,11 @@ describe('MediaListing of videos', () => {
     expect(thingWebmEl.children[2].getAttribute('class')).to.equal('caption');
     expect(thingWebmEl.children[2].textContent).to.equal('thing.webm');
   });
-})
+});
 
 describe('MediaListing of audio', () => {
-  const mockTableHtml = mck.buildTableStr('p/stuff/', 'MediaListing-vidoes', [
+  const testBedId = 'MediaListing-audio';
+  const mockTableHtml = mck.buildTableStr('p/stuff/', testBedId, [
     mck.buildRow("nils frahm.mp3", mck.hm(2851772, '2.8 M'), mck.hm(993, '993 secs')),
     mck.buildRow("thing.bats", mck.hm(34809, '33 KB'), mck.hm(2223, '223+ s. since epoch')),
     mck.buildRow("keaton.flac", mck.hm(19768925, '19 M'), mck.hm(3999, '3999 s. since epoch')),
@@ -74,17 +84,12 @@ describe('MediaListing of audio', () => {
 
   let m : MediaListing;
   beforeEach(function() {
-    document.body.insertAdjacentHTML('afterbegin', mockTableHtml);
-    let trs = document.querySelectorAll('table#MediaListing-vidoes tbody > tr');
+    let trs = setupTestbed(testBedId, mockTableHtml).querySelectorAll('tbody > tr');
     expect(trs.length).to.equal(5); // including parent directory
     m = new MediaListing(trs);
-  })
+  });
 
-  afterEach(function() {
-    let mockTableEl = document.getElementById('MediaListing-vidoes')
-    expect(mockTableEl, 'missing mock testbed').to.be.ok;
-    document.body.removeChild(mockTableEl!);
-  })
+  afterEach(tearDownTestbed.bind(null /*this*/, testBedId));
 
   it('#listingSize getter', function() {
     expect(m.listingSize).to.equal(4);
@@ -132,11 +137,12 @@ describe('MediaListing of audio', () => {
     expect(hensonOpusEl.children[2].getAttribute('class')).to.equal('caption');
     expect(hensonOpusEl.children[2].textContent).to.equal('henson.opus');
   });
-})
+});
 
 describe('MediaListing of images', function() {
+  const testBedId = 'MediaListing-images';
   it('#listingSize getter', function() { this.skip(); });
   it('#length getter', function() { this.skip(); });
   it('#isMixed getter', function() { this.skip(); });
   it('get(...)', function() { this.skip(); });
-})
+});
