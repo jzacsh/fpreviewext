@@ -31,7 +31,7 @@ describe('MediaListing of videos', () => {
   });
 
   it('#length getter', function() {
-    expect(m.length).to.equal(2); // bar.mp4 and thing.webm
+    expect(m.length, 'should have files "bar.mp4" & "thing.webm"').to.equal(2);
   });
 
   it('#isMixed getter', function() {
