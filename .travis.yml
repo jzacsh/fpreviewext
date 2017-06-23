@@ -6,7 +6,7 @@ before_install:
   - npm install --global npm@"$(jq -r '.engines.npm' package.json)"
 before_script:
   - sudo apt-get -qq update
-  - sudo apt-get install -y mogrify
+  - sudo apt-get install -y imagemagick # mogrify
 node_js:
   - 4.2
 notifications:
