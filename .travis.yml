@@ -2,7 +2,7 @@ script: make all
 language: node_js
 before_install:
   - sudo apt-get -qq update
-  - sudo apt-get install -y jq
+  - sudo apt-get install -y jq git
   - npm install --global npm@"$(jq -r '.engines.npm' package.json)"
 before_script:
   - sudo apt-get -qq update

@@ -28,7 +28,7 @@ Can be installed {crwebstore}[directly from the webstore here]
   . `mogrify` _(imagemagick)_
   . `readlink`
   . `sed`
-  . `ln`
+  . `git`
 2. `npm install`
 
 .run unit tests

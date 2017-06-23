@@ -1,9 +1,9 @@
 OUT_NAME  :=  extension
-CRX_FILE  :=  $(OUT_NAME).crx
-ZIP_FILE  :=  $(OUT_NAME).zip
+BUILDDIR  :=  build
 SRC_DIR   :=  src
 BIN_DIR   :=  bin
-BUILDDIR  :=  build
+ZIP_FILE  :=  $(BUILDDIR)/$(OUT_NAME).zip
+CRX_FILE  :=  $(BUILDDIR)/$(OUT_NAME).crx
 EXT_DIR   :=  $(BUILDDIR)/$(OUT_NAME)
 TYPESCPS  :=  $(wildcard $(SRC_DIR)/ts/*.ts)
 TS_SPECS  :=  $(wildcard $(SRC_DIR)/ts/*.spec.ts)
@@ -11,13 +11,15 @@ BUILT_JS  :=  $(BUILDDIR)/js
 JAVASCPS  :=  $(BUILT_JS)/index.js
 PACKEDJS  :=  $(BUILDDIR)/bundle.js
 
-# requires of buildcrx in $PATH; see:
-#   https://github.com/jzacsh/bin/blob/65a3a4ee7902/share/buildcrx
-$(CRX_FILE) $(ZIP_FILE): $(SRC_DIR)/manifest.json $(PACKEDJS) $(SRC_DIR)/index.css $(BUILDDIR)/icon.png
+$(ZIP_FILE): $(SRC_DIR)/manifest.json $(PACKEDJS) $(SRC_DIR)/index.css $(BUILDDIR)/icon.png
 	$(shell mkdir -p $(EXT_DIR))
 	$(shell $(BIN_DIR)/cptag $(EXT_DIR) $^)
+	cd $(BUILDDIR) && ../$(BIN_DIR)/buildcrx $(OUT_NAME)
+
+# requires of buildcrx in $PATH; see:
+#   https://github.com/jzacsh/bin/blob/65a3a4ee7902/share/buildcrx
+$(CRX_FILE): $(ZIP_FILE)
 	cd $(BUILDDIR) && ../$(BIN_DIR)/buildcrx $(OUT_NAME) $(PRIVATEK)
-	ln --symbolic --force $(BUILDDIR)/$(CRX_FILE) $(CRX_FILE)
 
 $(PACKEDJS): $(JAVASCPS)
 	$(BIN_DIR)/webpack --config webpack.config.js
@@ -44,7 +46,7 @@ coverage: SHELL:=/bin/bash
 coverage:
 	w3m -dump -T text/html < $(BUILDDIR)/coverage/*/lcov-report/index.html
 
-all: clean $(CRX_FILE)
+all: clean $(ZIP_FILE)
 
 clean:
 	$(RM) -rf $(OUT_NAME).* $(BUILDDIR)

@@ -5,12 +5,19 @@
 #   which was listed as available under creativecommons.org/licenses/by/3.0/
 set -euo pipefail
 
-if [[ $# -ne 2 ]]; then
-  echo "Usage: "$(basename "$0")" <extension dir> <pem path>" >&2
+if [[ $# -ne 1 ]]; then
+  echo "Usage: "$(basename "$0")" EXTENSION_DIR [PEM_PATH]" >&2
   exit 1
 fi
+
 declare -r dir="$1"
-declare -r key="$2"
+
+if [[ $# -eq 2 ]]; then
+  declare -r havekey=0
+else
+  declare -r havekey=1
+  declare -r key="$2"
+fi
 
 name="$(basename "$dir")"; declare -r name
 declare -r crx="$name.crx"
@@ -19,14 +26,25 @@ declare -r sig="$name.sig"
 declare -r zip="$name.zip"
 cleanup() (
   echo -n 'cleaning up...'
-  rm -f "$pub" "$sig" # do NOT remove zip
+  if (( havekey ));then
+    rm -f "$pub" "$sig" # do NOT remove zip
+  fi
   echo ' done.'
 )
 trap cleanup EXIT
 
-# zip up the crx dir
-cwd="$(pwd -P)"; declare -r cwd
-(cd "$dir" && zip --quiet --recurse-paths -9 -X "$cwd"/"$zip" .)
+if [[ -e "$zip" ]]; then
+  printf 'WARNING: ZIP already built, moving on...\n' >&2
+else
+  # zip up the ext dir
+  cwd="$(pwd -P)"; declare -r cwd
+  (cd "$dir" && zip --quiet --recurse-paths -9 -X "$cwd"/"$zip" .)
+fi
+
+(( havekey )) || {
+  printf 'WARNING: skipping CRX file build...\n' >&2
+  exit
+}
 
 # signature
 openssl sha1 -sha1 -binary -sign "$key" < "$zip" > "$sig"
