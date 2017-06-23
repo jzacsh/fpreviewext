@@ -1,5 +1,12 @@
 script: make all
 language: node_js
+before_install:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y jq
+  - npm install --global npm@"$(jq -r '.engines.npm' package.json)"
+before_script:
+  - sudo apt-get -qq update
+  - sudo apt-get install -y mogrify
 node_js:
   - 4.2
 notifications:
