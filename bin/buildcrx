@@ -11,12 +11,11 @@ if [[ $# -ne 1 ]]; then
 fi
 
 declare -r dir="$1"
-
 if [[ $# -eq 2 ]]; then
-  declare -r havekey=0
-else
   declare -r havekey=1
   declare -r key="$2"
+else
+  declare -r havekey=0
 fi
 
 name="$(basename "$dir")"; declare -r name
