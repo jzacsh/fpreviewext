@@ -92,6 +92,7 @@ describe('MediaListing of videos', () => {
     expect(barMp4El.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
     expect(barMp4El.children[0].nodeName).to.equal('VIDEO');
     expect(barMp4El.children[0].textContent).to.equal('Preview of bar.mp4');
+    expect(barMp4El.children[0].getAttribute('src')).to.equal('bar.mp4');
     expect(barMp4El.children[2].getAttribute('class')).to.equal('caption');
     expect(barMp4El.children[2].textContent).to.equal('bar.mp4');
 
@@ -101,6 +102,7 @@ describe('MediaListing of videos', () => {
     expect(thingWebmEl.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
     expect(thingWebmEl.children[0].nodeName).to.equal('VIDEO');
     expect(thingWebmEl.children[0].textContent).to.equal('Preview of thing.webm');
+    expect(thingWebmEl.children[0].getAttribute('src')).to.equal('thing.webm');
     expect(thingWebmEl.children[2].getAttribute('class')).to.equal('caption');
     expect(thingWebmEl.children[2].textContent).to.equal('thing.webm');
   });
@@ -149,6 +151,7 @@ describe('MediaListing of audio', () => {
     expect(nilsFrahmMp3El.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
     expect(nilsFrahmMp3El.children[0].nodeName).to.equal('AUDIO');
     expect(nilsFrahmMp3El.children[0].textContent).to.equal('Preview of nils frahm.mp3');
+    expect(nilsFrahmMp3El.children[0].getAttribute('src')).to.equal('nils frahm.mp3');
     expect(nilsFrahmMp3El.children[2].getAttribute('class')).to.equal('caption');
     expect(nilsFrahmMp3El.children[2].textContent).to.equal('nils frahm.mp3');
 
@@ -158,6 +161,7 @@ describe('MediaListing of audio', () => {
     expect(keatonFlacEl.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
     expect(keatonFlacEl.children[0].nodeName).to.equal('AUDIO');
     expect(keatonFlacEl.children[0].textContent).to.equal('Preview of keaton.flac');
+    expect(keatonFlacEl.children[0].getAttribute('src')).to.equal('keaton.flac');
     expect(keatonFlacEl.children[2].getAttribute('class')).to.equal('caption');
     expect(keatonFlacEl.children[2].textContent).to.equal('keaton.flac');
 
@@ -167,6 +171,7 @@ describe('MediaListing of audio', () => {
     expect(hensonOpusEl.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
     expect(hensonOpusEl.children[0].nodeName).to.equal('AUDIO');
     expect(hensonOpusEl.children[0].textContent).to.equal('Preview of henson.opus');
+    expect(hensonOpusEl.children[0].getAttribute('src')).to.equal('henson.opus');
     expect(hensonOpusEl.children[2].getAttribute('class')).to.equal('caption');
     expect(hensonOpusEl.children[2].textContent).to.equal('henson.opus');
   });
