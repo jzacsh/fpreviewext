@@ -5,6 +5,9 @@
 :icofolder: https://github.com/iconic/open-iconic/tree/1d1e8885c503187/svg/folder.svg
 :icoimg: https://github.com/iconic/open-iconic/tree/1d1e8885c503187/svg/image.svg
 :buildcrx: https://github.com/jzacsh/bin/blob/65a3a4ee7902/share/buildcrx
+:cistatus: https://travis-ci.org/jzacsh/fpreviewext
+
+image:{cistatus}.svg?branch=master["Build Status", link="{cistatus}"]
 
 Particularly useful at the moment while all my linux tooling is confused by
 webp, yet I use webp heavily. Good old browsers, though, can do everything.
