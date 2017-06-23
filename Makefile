@@ -49,6 +49,6 @@ coverage:
 all: clean $(ZIP_FILE) test
 
 clean:
-	$(RM) -rf $(OUT_NAME).* $(BUILDDIR)
+	$(RM) -rf $(BUILDDIR)
 
 .PHONY: clean all tdd test coverage
