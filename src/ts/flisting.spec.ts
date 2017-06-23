@@ -220,14 +220,14 @@ describe('MediaListing of images', function() {
     expect(nilsAlbumJpg.children[2].getAttribute('class')).to.equal('caption');
     expect(nilsAlbumJpg.children[2].textContent).to.equal('nils album cover.jpg');
 
-    const keatonFlacEl = m.get(3).buildEl();
-    expect(keatonFlacEl.nodeName).to.equal('A');
-    expect(keatonFlacEl.getAttribute('href')).to.equal('keaton.gif');
-    expect(keatonFlacEl.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
-    expect(keatonFlacEl.children[0].nodeName).to.equal('AUDIO');
-    expect(keatonFlacEl.children[0].getAttribute('alt')).to.equal('Preview of keaton.gif');
+    const keatonGifEl = m.get(3).buildEl();
+    expect(keatonGifEl.nodeName).to.equal('A');
+    expect(keatonGifEl.getAttribute('href')).to.equal('keaton.gif');
+    expect(keatonGifEl.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
+    expect(keatonGifEl.children[0].nodeName).to.equal('IMG');
+    expect(keatonGifEl.children[0].getAttribute('alt')).to.equal('Preview of keaton.gif');
     expect(nilsAlbumJpg.children[0].getAttribute('src')).to.equal('keaton.gif');
-    expect(keatonFlacEl.children[2].getAttribute('class')).to.equal('caption');
-    expect(keatonFlacEl.children[2].textContent).to.equal('keaton.gif');
+    expect(keatonGifEl.children[2].getAttribute('class')).to.equal('caption');
+    expect(keatonGifEl.children[2].textContent).to.equal('keaton.gif');
   });
 });
