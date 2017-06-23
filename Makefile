@@ -35,7 +35,7 @@ $(BUILDDIR)/icon.png: $(SRC_DIR)/icon.svg
 $(BUILDDIR):
 	$(shell mkdir -p $@)
 
-test: all $(JAVASCPS) $(TS_SPECS)
+test: $(JAVASCPS) $(TS_SPECS)
 	$(BIN_DIR)/karma start karma.conf.js --single-run
 	$(MAKE) coverage
 
@@ -46,7 +46,7 @@ coverage: SHELL:=/bin/bash
 coverage:
 	w3m -dump -T text/html < $(BUILDDIR)/coverage/*/lcov-report/index.html
 
-all: clean $(ZIP_FILE)
+all: clean $(ZIP_FILE) test
 
 clean:
 	$(RM) -rf $(OUT_NAME).* $(BUILDDIR)
