@@ -179,8 +179,55 @@ describe('MediaListing of audio', () => {
 
 describe('MediaListing of images', function() {
   const testBedId = 'MediaListing-images';
-  it('#listingSize getter', function() { this.skip(); });
-  it('#length getter', function() { this.skip(); });
-  it('#isMixed getter', function() { this.skip(); });
-  it('get(...)', function() { this.skip(); });
+
+  const mockTableHtml = mck.buildTableStr('p/stuff/', testBedId, [
+    mck.buildRow("nils album cover.jpg", mck.hm(2851772, '2.8 M'), mck.hm(993, '993 secs')),
+    mck.buildRow("thing.png", mck.hm(34809, '33 KB'), mck.hm(2223, '223+ s. since epoch')),
+    mck.buildRow("stuff.txt", mck.hm(98403, '99 KB'), mck.hm(3828, '338+ s. since epoch')),
+    mck.buildRow("keaton.gif", mck.hm(53718111, '53 M'), mck.hm(3999, '3999 s. since epoch')),
+    mck.buildRow("henson.webp", mck.hm(17348923, '17 M'), mck.hm(3882, '3882 s. since epoch')),
+  ]);
+
+  let m : MediaListing;
+  beforeEach(function() {
+    let trs = setupTestbed(testBedId, mockTableHtml).querySelectorAll('tbody > tr');
+    expect(trs.length).to.equal(6); // including parent directory
+    m = new MediaListing(trs);
+  });
+
+  afterEach(tearDownTestbed.bind(null /*this*/, testBedId));
+
+  it('#listingSize getter', function() {
+    expect(m.listingSize).to.equal(5);
+  });
+
+  it('#length getter', function() {
+    expect(m.length).to.equal(4);
+  });
+
+  it('#isMixed getter', function() {
+    expect(m.isMixed).to.equal(true);
+  });
+
+  it('get(...)', function() {
+    const nilsAlbumJpg = m.get(0).buildEl();
+    expect(nilsAlbumJpg.nodeName).to.equal('A');
+    expect(nilsAlbumJpg.getAttribute('href')).to.equal('nils album cover.jpg');
+    expect(nilsAlbumJpg.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
+    expect(nilsAlbumJpg.children[0].nodeName).to.equal('IMG');
+    expect(nilsAlbumJpg.children[0].getAttribute('alt')).to.equal('Preview of nils album cover.jpg');
+    expect(nilsAlbumJpg.children[0].getAttribute('src')).to.equal('nils album cover.jpg');
+    expect(nilsAlbumJpg.children[2].getAttribute('class')).to.equal('caption');
+    expect(nilsAlbumJpg.children[2].textContent).to.equal('nils album cover.jpg');
+
+    const keatonFlacEl = m.get(3).buildEl();
+    expect(keatonFlacEl.nodeName).to.equal('A');
+    expect(keatonFlacEl.getAttribute('href')).to.equal('keaton.gif');
+    expect(keatonFlacEl.children.length).to.equal(3); // TODO(zacsh) replace <br> with some CSS
+    expect(keatonFlacEl.children[0].nodeName).to.equal('AUDIO');
+    expect(keatonFlacEl.children[0].getAttribute('alt')).to.equal('Preview of keaton.gif');
+    expect(nilsAlbumJpg.children[0].getAttribute('src')).to.equal('keaton.gif');
+    expect(keatonFlacEl.children[2].getAttribute('class')).to.equal('caption');
+    expect(keatonFlacEl.children[2].textContent).to.equal('keaton.gif');
+  });
 });
