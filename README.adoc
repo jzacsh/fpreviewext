@@ -12,16 +12,18 @@ image:{cistatus}.svg?branch=master["Build Status", link="{cistatus}"]
 Particularly useful at the moment while all my linux tooling is confused by
 webp, yet I use webp heavily. Good old browsers, though, can do everything.
 
-For now this is just an media previewer, but I imagine I might want to add other
-capabilities in the future.
+For now this is just a media previewer, but I might add other capabilities in
+the future.
 
-image:screenshot.webp[
-alt="preview of extension's changes", width="70%"]
+image:screenshot.webp[alt="preview of extension's changes", width="70%"]
 
 Can be installed {crwebstore}[directly from the webstore here]
 
 .TODO
-. add code coverage
+. get *code coverage* reports; currently broken: +
+  istanbul just shows `0/0` statements, branches, functions, lines
+. *report crashing* phantomjs upstream; see `20eb8bb04bc88`
+. maybe add README detection/display if viewport is large
 
 == contributing
 
